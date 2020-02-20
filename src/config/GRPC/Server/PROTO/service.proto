@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service User {
+    rpc sign_up (userData) returns (statusResponse);
+}
+
+message statusResponse {
+    string status = 1;
+}
+
+message userData {
+    string login = 1;
+    string password = 2;
+}
