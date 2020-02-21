@@ -15,6 +15,16 @@ message user_data{
     string email = 4;
     string recovery_email = 5;
     plan plan = 6;
+    company company = 7;
+}
+
+message company {
+    string cnpj = 1;
+    string type = 2;
+    float minimal_sale_value = 3;
+    float icms = 4;
+    float pis = 5;
+    float cofins = 6;
 }
 
 message plan {

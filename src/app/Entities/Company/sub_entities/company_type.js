@@ -1,7 +1,7 @@
 module.exports = ({ type, DAO }) => {
     return new Promise(async (resolve, reject) => {
         if (!type || typeof type !== "string") {
-            return reject("User Type must be a valid string")
+            return reject("Company Type must be a valid string")
         }
         if (!DAO) {
             console.log(Error("DAO IS MISSING"))
@@ -9,8 +9,8 @@ module.exports = ({ type, DAO }) => {
         }
 
         try {
-            if (!await DAO.checkUserType(type)) {
-                return reject("Invalid Type")
+            if (!await DAO.checkCompanyType(type)) {
+                return reject("Invalid Company Type")
             }
             resolve(type)
         }

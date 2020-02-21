@@ -4,7 +4,8 @@ module.exports = class DAO {
         this.ObjectId = ObjectId
         this.collections = {
             users: db.collection("users"),
-            types: db.collection("types"),
+            userTypes: db.collection("user_types"),
+            companyTypes: db.collection("company_types"),
             plans: db.collection("plans")
         }
     }
@@ -118,9 +119,26 @@ module.exports = class DAO {
         })
     }
 
-    checkType(type) {
+    checkUserType(type) {
         return new Promise(async (resolve, reject) => {
-            this.collections.types.find({ type: type }).toArray((erro, result) => {
+            this.collections.userTypes.find({ type: type }).toArray((erro, result) => {
+                if (erro) {
+                    return reject(erro)
+                }
+
+                if (result.length > 0) {
+                    resolve(true)
+                }
+                else {
+                    resolve(false)
+                }
+            })
+        })
+    }
+
+    checkCompanyType(type) {
+        return new Promise(async (resolve, reject) => {
+            this.collections.companyTypes.find({ type: type }).toArray((erro, result) => {
                 if (erro) {
                     return reject(erro)
                 }
