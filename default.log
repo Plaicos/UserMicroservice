@@ -2,3 +2,6 @@
 2020.02.21, 05:20:36.0967 UTC -> [object Object]
 2020.02.21, 05:21:41.0313 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user 'Peituda3'","catched":"\"test error\""}
 2020.02.21, 05:24:11.0908 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user 'Peituda4'","catched":"\"test error\""}
+2020.02.21, 13:25:27.0297 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user and user credential from:'Frigobar'","catched":"\"INTERNAL SERVER ERROR, TRY LATER\""}
+2020.02.21, 13:31:15.0001 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user 'Frigobar'","catched":"\"INTERNAL SERVER ERROR, TRY LATER\""}
+2020.02.21, 13:37:21.0065 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user and user credential from:'Frigobar'","catched":"{}"}

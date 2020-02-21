@@ -61,6 +61,7 @@ module.exports = class User {
         return new Promise(async (resolve, reject) => {
             user.__proto__.validate = this.validate()
             user.__proto__.delete = this.delete()
+            user.__proto__.remove_password = this.remove_password()
             resolve(user)
         })
     }
@@ -122,6 +123,12 @@ module.exports = class User {
                     reject(erro)
                 }
             })
+        }
+    }
+
+    remove_password(){
+        return function(){
+            delete this.password
         }
     }
 }

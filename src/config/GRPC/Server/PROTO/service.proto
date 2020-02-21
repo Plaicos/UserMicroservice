@@ -3,10 +3,32 @@ syntax = "proto3";
 service User {
     rpc sign_up (sign_up_data) returns (statusResponse);
     rpc delete_user (userDelete) returns (statusResponse);
+    rpc get_user (userGet) returns (user_data);
+    rpc log_in (login_data) returns (session);
+}
+
+message login_data {
+    string login = 1;
+    string password = 2;
+}
+
+message session {
+    string status = 1;
+    session_data session_data = 2;
+}
+
+message session_data {
+    string logged_user = 1;
+    string token = 2;
 }
 
 message statusResponse {
     string status = 1;
+}
+
+message userGet {
+    string login = 1;
+    credential credential = 2;
 }
 
 message userDelete {
@@ -15,13 +37,14 @@ message userDelete {
 }
 
 message user_data{
-    string login = 1;
-    string password = 2;
-    string type = 3;
-    string email = 4;
-    string recovery_email = 5;
-    plan plan = 6;
-    company company = 7;
+    string _id = 1;
+    string login = 2;
+    string password = 3;
+    string type = 4;
+    string email = 5;
+    string recovery_email = 6;
+    plan plan = 7;
+    company company = 8;
 }
 
 message company {

@@ -6,6 +6,12 @@ service Authenticator {
     rpc generateToken (user) returns (tokenResponse);
     rpc authenticate (token) returns (credential);
     rpc checkCredentialClearance (credentialCheck) returns (statusResponse);
+    rpc deleteCredential (credentialDelete) returns (statusResponse);
+}
+
+message credentialDelete {
+    string user = 1;
+    credential credential = 2;
 }
 
 message Null {}

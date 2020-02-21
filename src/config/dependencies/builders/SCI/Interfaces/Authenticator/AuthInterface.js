@@ -52,9 +52,25 @@ module.exports = class AuthenticatorInterface {
                 if (erro) {
                     return reject(erro)
                 }
-                resolve(token)
+                resolve(token.token)
             })
         });
+    }
+
+    deleteCredential(user, credential) {
+        return new Promise(async (resolve, reject) => {
+            this.Interface.Authenticator.deleteCredential({ user, credential }, (erro, statusResponse) => {
+                if (erro) {
+                    return reject(erro)
+                }
+                if (statusResponse.status === "ok") {
+                    resolve()
+                }
+                else {
+                    reject("Something went wrong in credential deletion")
+                }
+            })
+        })
     }
 
 }

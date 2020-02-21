@@ -45,4 +45,33 @@ module.exports = class Controller {
         }
     }
 
+    get_user() {
+        var self = this
+        return async function (call, callback) {
+            let { credential, login } = call.request
+
+            try {
+                let user = await self.UseCases.getUser(login, credential)
+                callback(null, user)
+            }
+            catch (erro) {
+                self.handleError(erro, callback)
+            }
+        }
+    }
+
+    log_in() {
+        var self = this
+        return async function (call, callback) {
+            let login_data = call.request
+
+            try {
+                let session = await self.UseCases.log_in(login_data)
+                callback(null, session)
+            }
+            catch (erro) {
+                self.handleError(erro, callback)
+            }
+        }
+    }
 }

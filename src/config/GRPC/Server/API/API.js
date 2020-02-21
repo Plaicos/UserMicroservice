@@ -15,7 +15,9 @@ module.exports = class API {
 
         let api = {
             sign_up: Controller.sign_up(),
-            delete_user: Controller.delete_user()
+            delete_user: Controller.delete_user(),
+            get_user: Controller.get_user(),
+            log_in: Controller.log_in()
         }
         return Object.freeze(api)
     }

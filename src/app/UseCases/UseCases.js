@@ -12,7 +12,7 @@ module.exports = class UseCases {
 
     getUser(login, credential) {
         return new Promise(async (resolve, reject) => {
-            if (!user || typeof user !== "string") {
+            if (!login || typeof login !== "string") {
                 return reject("User must be a valis string")
             }
             if (!credential) {
@@ -25,6 +25,7 @@ module.exports = class UseCases {
             try {
                 let user = await new entities.User({ user: { login: login }, DAO, SCI }).load()
                 await user.validate(credential)
+                user.remove_password()
                 resolve(user)
             }
             catch (erro) {
@@ -60,19 +61,34 @@ module.exports = class UseCases {
                 rollback.credentialCreated = true
 
                 //simulates payment approval
-                rollback.paymentApproved = true
+                rollback.paymentApproved = false
+                throw "Test Error"
                 resolve()
             }
             catch (erro) {
                 if (!rollback.userCreated) {
                     return reject(erro)
                 }
-                if (rollback.userCreated && !rollback.paymentApproved) {
+
+                let credential = {
+                    user: user.login,
+                    level: 4,
+                    scope: {
+                        read: true,
+                        write: true,
+                        third_party: {
+                            read: false,
+                            write: false
+                        }
+                    }
+                }
+
+                if (rollback.userCreated && !rollback.credentialCreated && !rollback.paymentApproved) {
                     reject(erro)
                     console.log("Payment Processing error, deleting user")
 
                     try {
-                        await this.deleteUser(user.login)
+                        await this.deleteUser(user.login, credential)
                     }
                     catch (erro) {
                         this.rollback_log({
@@ -83,6 +99,54 @@ module.exports = class UseCases {
                         return
                     }
                 }
+                if (rollback.userCreated && rollback.credentialCreated && !rollback.paymentApproved) {
+                    reject(erro)
+                    console.log("Payment Processing error, deleting user and credential")
+
+                    try {
+                        await this.deleteUser(user.login, credential)
+                        await SCI.Authenticator.deleteCredential(user.login, credential)
+                        return
+                    }
+                    catch (erro) {
+                        this.rollback_log({
+                            type: "Rollback Error",
+                            message: `Failed to rollback in sign up use case due to payment failure, could not delete user and user credential from:'${user.login}'`,
+                            catched: JSON.stringify(erro)
+                        })
+                        return
+                    }
+                }
+            }
+        })
+    }
+
+    log_in(data) {
+        return new Promise(async (resolve, reject) => {
+            if (!data || typeof data !== "object") {
+                return reject("Log in data must be a valid object")
+            }
+
+            let { entities, DAO, SCI } = this
+
+            try {
+                let user = await new entities.User({ user: { login: data.login }, DAO, SCI }).load()
+                if(data.password === user.password){
+                    let session = {
+                        status: "ok",
+                        session_data: {
+                            logged_user: data.login,
+                            token:await SCI.Authenticator.generateToken(user.login)
+                        }
+                    }
+                    resolve(session)
+                }
+                else {
+                    return reject("Wrong Password")
+                }
+            }
+            catch (erro) {
+                reject(erro)
             }
         })
     }
