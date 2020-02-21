@@ -38,17 +38,90 @@ module.exports = class User {
         })
     }
 
-    methods(user){
-        return new Promise(async (resolve, reject)=>{
+    load() {
+        return new Promise(async (resolve, reject) => {
+            let { DAO, entities, data } = this
+            let { login } = data
+
+            try {
+                if (!await DAO.checkUser(login)) {
+                    return reject(`Failed to load, user '${login}' does not exist`)
+                }
+                let user = await DAO.getUser(login)
+                user = await this.methods(user)
+                resolve(user)
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    methods(user) {
+        return new Promise(async (resolve, reject) => {
             user.__proto__.validate = this.validate()
+            user.__proto__.delete = this.delete()
             resolve(user)
         })
     }
 
-    validate(){
-        var self = this
-        return async function(){
-            resolve()
+    delete() {
+        var { DAO } = this
+        return function () {
+            return new Promise(async (resolve, reject) => {
+                let { login } = this
+
+                try {
+                    await DAO.deleteUser(login)
+                    resolve()
+                }
+                catch (erro) {
+                    reject(erro)
+                }
+            })
+        }
+
+    }
+
+    validate() {
+        var { SCI } = this
+        return function (credential) {
+            return new Promise(async (resolve, reject) => {
+                if (credential.user !== this.login) {
+                    var config = {
+                        level: 3,
+                        scope: {
+                            read: false,
+                            write: false,
+                            third_party: {
+                                read: true,
+                                write: true
+                            }
+                        }
+                    }
+                }
+                else {
+                    var config = {
+                        level: 4,
+                        scope: {
+                            read: true,
+                            write: true,
+                            third_party: {
+                                read: false,
+                                write: false
+                            }
+                        }
+                    }
+                }
+
+                try {
+                    await SCI.Authenticator.checkCredentialClearance(config, credential)
+                    resolve()
+                }
+                catch (erro) {
+                    reject(erro)
+                }
+            })
         }
     }
 }

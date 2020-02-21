@@ -1,0 +1,4 @@
+2020.02.21, 05:19:26.0187 UTC -> [object Object]
+2020.02.21, 05:20:36.0967 UTC -> [object Object]
+2020.02.21, 05:21:41.0313 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user 'Peituda3'","catched":"\"test error\""}
+2020.02.21, 05:24:11.0908 UTC -> {"type":"Rollback Error","message":"Failed to rollback in sign up use case due to payment failure, could not delete user 'Peituda4'","catched":"\"test error\""}

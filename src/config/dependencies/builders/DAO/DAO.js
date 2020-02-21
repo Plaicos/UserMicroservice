@@ -46,11 +46,11 @@ module.exports = class DAO {
         })
     }
 
-    updateProduct(id, product) {
+    updateUser(login, user) {
         return new Promise(async (resolve, reject) => {
             let { ObjectId } = this
             try {
-                await this.collections.products.update({ _id: ObjectId(id) }, product)
+                await this.collections.users.update({ login: login }, user)
                 resolve()
             }
             catch (erro) {
@@ -59,17 +59,17 @@ module.exports = class DAO {
         })
     }
 
-    getProduct(id) {
+    getUser(login) {
         return new Promise(async (resolve, reject) => {
             let { ObjectId } = this
 
             try {
-                this.collections.products.find({ _id: ObjectId(id) }).toArray((erro, result) => {
+                this.collections.users.find({ login: login }).toArray((erro, result) => {
                     if (erro) {
                         return reject(erro)
                     }
                     if (result.length === 0) {
-                        return reject("That ID does not refere to any product")
+                        return reject("That login does not refere to any user")
                     }
                     resolve(result[0])
                 })
@@ -80,13 +80,12 @@ module.exports = class DAO {
         })
     }
 
-    deleteProduct(id) {
+    deleteUser(login) {
         return new Promise(async (resolve, reject) => {
             let { ObjectId } = this
 
             try {
-                console.log("deleted")
-                await this.collections.products.deleteOne({ _id: ObjectId(id) })
+                await this.collections.users.deleteOne({ login: login })
                 resolve()
             }
             catch (erro) {

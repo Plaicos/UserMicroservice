@@ -27,4 +27,22 @@ module.exports = class Controller {
         }
     }
 
+    delete_user() {
+        var self = this
+        return async function (call, callback) {
+            let { credential, login } = call.request
+
+            try {
+                await self.UseCases.deleteUser(login, credential)
+                let statusResponse = {
+                    status: "ok"
+                }
+                callback(null, statusResponse)
+            }
+            catch (erro) {
+                self.handleError(erro, callback)
+            }
+        }
+    }
+
 }

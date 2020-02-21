@@ -2,10 +2,16 @@ syntax = "proto3";
 
 service User {
     rpc sign_up (sign_up_data) returns (statusResponse);
+    rpc delete_user (userDelete) returns (statusResponse);
 }
 
 message statusResponse {
     string status = 1;
+}
+
+message userDelete {
+    string login = 1;
+    credential credential = 2;
 }
 
 message user_data{
@@ -40,4 +46,21 @@ message payment_data{
 message sign_up_data {
     user_data user_data = 1;
     payment_data payment_data = 2;
+}
+
+message credential {
+    string user = 1;
+    int32 level = 2;
+    scope scope = 3;
+}
+
+message scope {
+    bool read = 1;
+    bool write = 2;
+    third_party_scope third_party = 3;
+}
+
+message third_party_scope {
+    bool read = 1;
+    bool write = 2;
 }

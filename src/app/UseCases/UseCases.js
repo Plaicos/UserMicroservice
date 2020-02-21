@@ -10,6 +10,29 @@ module.exports = class UseCases {
         this.entities = require("../Entities/entities")
     }
 
+    getUser(login, credential) {
+        return new Promise(async (resolve, reject) => {
+            if (!user || typeof user !== "string") {
+                return reject("User must be a valis string")
+            }
+            if (!credential) {
+                console.log(Error("CREDENTIAL IS MISSINGF"))
+                return reject("INTERNAL SERVER ERROR, TRY LATER")
+            }
+
+            let { DAO, entities, SCI } = this
+
+            try {
+                let user = await new entities.User({ user: { login: login }, DAO, SCI }).load()
+                await user.validate(credential)
+                resolve(user)
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
     signUp(data) {
         return new Promise(async (resolve, reject) => {
             if (!data || typeof data !== "object") {
@@ -19,6 +42,7 @@ module.exports = class UseCases {
             let { DAO, SCI, RF, entities } = this
             let rollback = {
                 userCreated: false,
+                credentialCreated: false,
                 paymentApproved: false
             }
 
@@ -26,8 +50,17 @@ module.exports = class UseCases {
                 var user = await new entities.User({ user: data.user_data, DAO, SCI, RF }).build()
                 await DAO.registerUser(user)
                 rollback.userCreated = true
-                //
 
+                //credential creation
+                await SCI.Authenticator.createCredential({
+                    level: 4, user: user.login, scope: {
+                        read: true, write: true, third_party: { read: false, write: false }
+                    }
+                })
+                rollback.credentialCreated = true
+
+                //simulates payment approval
+                rollback.paymentApproved = true
                 resolve()
             }
             catch (erro) {
@@ -54,14 +87,23 @@ module.exports = class UseCases {
         })
     }
 
-    deleteUser(login) {
+    deleteUser(login, credential) {
         return new Promise(async (resolve, reject) => {
             if (!login || typeof login !== "string") {
                 return reject("Login must be a valid string")
             }
+            if (!credential) {
+                console.log(Error("CREDENTIAL IS MISSINGF"))
+                return reject("INTERNAL SERVER ERROR, TRY LATER")
+            }
+
+            let { DAO, entities, SCI } = this
 
             try {
-                await 
+                let user = await new entities.User({ user: { login: login }, DAO, SCI }).load()
+                await user.validate(credential)
+                await user.delete()
+                resolve()
             }
             catch (erro) {
                 reject(erro)
@@ -69,9 +111,9 @@ module.exports = class UseCases {
         })
     }
 
-    rollback_log(log) {
+    rollback_log(obj) {
         const log = require('log-to-file');
-        log(log)
+        log(JSON.stringify(obj))
         return
     }
 
