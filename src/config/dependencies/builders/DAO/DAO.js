@@ -3,13 +3,9 @@ module.exports = class DAO {
         this.db = db
         this.ObjectId = ObjectId
         this.collections = {
-            products: db.collection("products"),
+            users: db.collection("users"),
             types: db.collection("types"),
-            madeIn: db.collection("countries"),
-            origins: db.collection("origins"),
-            applications: db.collection("applications"),
-            inci: db.collection("inci"),
-            functions: db.collection("functions")
+            plans: db.collection("plans")
         }
     }
 
@@ -37,10 +33,10 @@ module.exports = class DAO {
         })
     }
 
-    registerProduct(product) {
+    registerUser(user) {
         return new Promise(async (resolve, reject) => {
             try {
-                await this.collections.products.insertOne(product)
+                await this.collections.users.insertOne(user)
                 resolve()
             }
             catch (erro) {
@@ -83,28 +79,6 @@ module.exports = class DAO {
         })
     }
 
-    getProductOwner(id) {
-        return new Promise(async (resolve, reject) => {
-            let { ObjectId } = this
-
-            try {
-                this.collections.products.find({ _id: ObjectId(id) }).toArray((erro, result) => {
-                    if (erro) {
-                        return reject(erro)
-                    }
-                    if (result.length === 0) {
-                        return reject("That ID does not refere to any product")
-                    }
-
-                    resolve(result[0].user)
-                })
-            }
-            catch (erro) {
-                reject(erro)
-            }
-        })
-    }
-
     deleteProduct(id) {
         return new Promise(async (resolve, reject) => {
             let { ObjectId } = this
@@ -120,16 +94,12 @@ module.exports = class DAO {
         })
     }
 
-    checkAvailability(availability) {
-
-    }
-
-    checkProduct(id) {
+    checkUser(login) {
         return new Promise(async (resolve, reject) => {
             let { ObjectId } = this
 
             try {
-                this.collections.products.find({ _id: ObjectId(id) }).toArray((erro, result) => {
+                this.collections.users.find({ login: login }).toArray((erro, result) => {
                     if (erro) {
                         return reject(erro)
                     }
@@ -145,40 +115,6 @@ module.exports = class DAO {
             catch (erro) {
                 reject(erro)
             }
-        })
-    }
-
-    checkMadeIn(made_in) {
-        return new Promise(async (resolve, reject) => {
-            this.collections.madeIn.find({ name: made_in }).toArray((erro, result) => {
-                if (erro) {
-                    return reject(erro)
-                }
-
-                if (result.length > 0) {
-                    resolve(true)
-                }
-                else {
-                    resolve(false)
-                }
-            })
-        })
-    }
-
-    checkApplication(application) {
-        return new Promise(async (resolve, reject) => {
-            this.collections.applications.find({ application: application }).toArray((erro, result) => {
-                if (erro) {
-                    return reject(erro)
-                }
-
-                if (result.length > 0) {
-                    return resolve(true)
-                }
-                else {
-                    return resolve(false)
-                }
-            })
         })
     }
 
@@ -199,36 +135,21 @@ module.exports = class DAO {
         })
     }
 
-    checkInciName(inci_name) {
+    checkPlan(plan) {
         return new Promise(async (resolve, reject) => {
-            this.collections.inci.find({ inci: inci_name }).toArray((erro, result) => {
-                if (erro) {
-                    return reject(erro)
-                }
-                if (result.length > 0) {
-                    return resolve(true)
-                }
-                else {
-                    return resolve(false)
-                }
-            })
-        })
-    }
-
-    checkOrigin(origin) {
-        return new Promise(async (resolve, reject) => {
-            this.collections.origins.find({ origin: origin }).toArray((erro, result) => {
+            this.collections.plans.find(plan).toArray((erro, result) => {
                 if (erro) {
                     return reject(erro)
                 }
 
                 if (result.length > 0) {
-                    return resolve(true)
+                    resolve(result[0])
                 }
                 else {
-                    return resolve(false)
+                    resolve(false)
                 }
             })
         })
     }
+
 }

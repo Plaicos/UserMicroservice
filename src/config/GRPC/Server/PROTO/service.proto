@@ -1,14 +1,33 @@
 syntax = "proto3";
 
 service User {
-    rpc sign_up (userData) returns (statusResponse);
+    rpc sign_up (sign_up_data) returns (statusResponse);
 }
 
 message statusResponse {
     string status = 1;
 }
 
-message userData {
+message user_data{
     string login = 1;
     string password = 2;
+    string type = 3;
+    string email = 4;
+    string recovery_email = 5;
+    plan plan = 6;
+}
+
+message plan {
+    string type = 1;
+    string size = 2;
+    string billing = 3;
+}
+
+message payment_data{
+    string method = 1;
+}
+
+message sign_up_data {
+    user_data user_data = 1;
+    payment_data payment_data = 2;
 }

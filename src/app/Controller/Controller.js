@@ -12,7 +12,18 @@ module.exports = class Controller {
     sign_up() {
         var self = this
         return async function (call, callback) {
-            
+            let data = call.request
+
+            try {
+                await self.UseCases.signUp(data)
+                let statusResponse = {
+                    status: "ok"
+                }
+                callback(null, statusResponse)
+            }
+            catch (erro) {
+                self.handleError(erro, callback)
+            }
         }
     }
 
