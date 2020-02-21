@@ -17,7 +17,7 @@ module.exports = class UseCases {
             }
 
             let { DAO, SCI, RF, entities } = this
-            let rollBack = {
+            let rollback = {
                 userCreated: false,
                 paymentApproved: false
             }
@@ -25,25 +25,54 @@ module.exports = class UseCases {
             try {
                 var user = await new entities.User({ user: data.user_data, DAO, SCI, RF }).build()
                 await DAO.registerUser(user)
-                rollBack.userCreated = true
+                rollback.userCreated = true
                 //
+
                 resolve()
             }
             catch (erro) {
-                if (!rollBack.userCreated) {
+                if (!rollback.userCreated) {
                     return reject(erro)
                 }
-                if (rollBack.userCreated && !rollBack.paymentApproved) {
+                if (rollback.userCreated && !rollback.paymentApproved) {
                     reject(erro)
                     console.log("Payment Processing error, deleting user")
-                    await this.deleteUser(user.login)
+
+                    try {
+                        await this.deleteUser(user.login)
+                    }
+                    catch (erro) {
+                        this.rollback_log({
+                            type: "Rollback Error",
+                            message: `Failed to rollback in sign up use case due to payment failure, could not delete user '${user.login}'`,
+                            catched: JSON.stringify(erro)
+                        })
+                        return
+                    }
                 }
             }
         })
     }
 
     deleteUser(login) {
-        
+        return new Promise(async (resolve, reject) => {
+            if (!login || typeof login !== "string") {
+                return reject("Login must be a valid string")
+            }
+
+            try {
+                await 
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    rollback_log(log) {
+        const log = require('log-to-file');
+        log(log)
+        return
     }
 
 }
