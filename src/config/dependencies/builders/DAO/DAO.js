@@ -35,8 +35,15 @@ module.exports = class DAO {
     }
 
     registerUser(user) {
+        let { ObjectId } = this
         return new Promise(async (resolve, reject) => {
             try {
+                console.log({ user })
+                for (let i = 0; i < user.warehouses.length; i++) {
+                    let _id = ObjectId()
+                    user.warehouses[i]._id = _id
+                }
+
                 await this.collections.users.insertOne(user)
                 resolve()
             }
@@ -169,4 +176,48 @@ module.exports = class DAO {
         })
     }
 
+    getUserWarehouses(login) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.collections.users.find({ login: login }).toArray((erro, result) => {
+                    if (erro) {
+                        return reject(erro)
+                    }
+                    if (result.length === 0) {
+                        return reject("User has no warehouse")
+                    }
+                    resolve(result[0].warehouses)
+                })
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    getUserWarehouse(login, id) {
+        return new Promise(async (resolve, reject) => {
+            let { ObjectId } = this
+
+            try {
+                this.collections.users.find({ login: login, warehouses: { $elemMatch: { _id: ObjectId(id) } } }).toArray((erro, result) => {
+                    if (erro) {
+                        return reject(erro)
+                    }
+                    if (result.length === 0) {
+                        return reject("That ID does not refere to any warehouse")
+                    }
+                    for (let i of result[0].warehouses) {
+                        if (ObjectId(id).equals(ObjectId(i._id))) {
+                            return resolve(i)
+                        }
+                    }
+                    reject("Something went wrong finding the warehouse")
+                })
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
 }

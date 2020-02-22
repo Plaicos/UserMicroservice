@@ -7,6 +7,14 @@ service User {
     rpc get_user (userGet) returns (user_data);
     rpc log_in (login_data) returns (session);
     rpc check_user (userGet) returns (statusResponse);
+    rpc get_user_warehouses (userGet) returns (warehouses);
+    rpc get_user_warehouse (warehouseGet) returns (warehouse);
+}
+
+message warehouseGet {
+    string id= 1;
+    string user = 2;
+    credential credential = 3;
 }
 
 message login_data {
@@ -45,7 +53,7 @@ message user_data{
     string type = 4;
     string email = 5;
     string recovery_email = 6;
-    plan plan = 7;
+    string billing = 7;
     company company = 8;
     warehouse warehouse = 9;
 }
@@ -69,10 +77,19 @@ message payment_data{
     string method = 1;
 }
 
-message warehouse {
+message location {
     string country = 1;
     string state = 2;
     string city = 3;
+}
+
+message warehouse {
+    string _id = 1;
+    location location = 2;
+}
+
+message warehouses {
+    repeated warehouse warehouses = 1;
 }
 
 message sign_up_data {

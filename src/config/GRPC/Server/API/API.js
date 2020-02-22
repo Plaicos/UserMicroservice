@@ -18,7 +18,9 @@ module.exports = class API {
             delete_user: Controller.delete_user(),
             get_user: Controller.get_user(),
             log_in: Controller.log_in(),
-            check_user: Controller.check_user()
+            check_user: Controller.check_user(),
+            get_user_warehouses: Controller.get_user_warehouses(),
+            get_user_warehouse: Controller.get_user_warehouse()
         }
         return Object.freeze(api)
     }

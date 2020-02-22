@@ -9,7 +9,7 @@ module.exports = class Warehouse {
     build() {
         return new Promise(async (resolve, reject) => {
             let { DAO, SCI, data, entities } = this
-        
+
             if (!data || typeof data !== "object") {
                 return reject("Warehouse data must be a valid object")
             }
@@ -18,7 +18,7 @@ module.exports = class Warehouse {
             let warehouse = new Object()
 
             try {
-                warehouse.location = await entities.location({ location: data, DAO, SCI })
+                warehouse.location = await entities.location({ location: location, DAO, SCI })
                 warehouse = this.methods(warehouse)
                 resolve(warehouse)
             }
@@ -29,7 +29,45 @@ module.exports = class Warehouse {
     }
 
     load() {
+        return new Promise(async (resolve, reject) => {
+            let { DAO, data } = this
+            let { user, id } = data
 
+            if (!id || typeof id !== "string") {
+                return reject("Warehouse ID must be a valid string")
+            }
+
+            if (!user || typeof user !== "string") {
+                return reject("Warehouse user must be a valid string")
+            }
+
+            try {
+                let warehouse = await DAO.getUserWarehouse(user, id)
+                resolve(warehouse)
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    loadAll() {
+        return new Promise(async (resolve, reject) => {
+            let { DAO, data } = this
+            let { user } = data
+
+            if (!user || typeof user !== "string") {
+                return reject("Warehouse user must be a valid string")
+            }
+
+            try {
+                let warehouses = await DAO.getUserWarehouses(user)
+                resolve(warehouses)
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
     }
 
     methods(warehouse) {

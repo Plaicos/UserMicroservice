@@ -61,7 +61,7 @@ module.exports = class UseCases {
 
                 //simulates payment approval
                 rollback.paymentApproved = false
-                
+
                 resolve()
             }
             catch (erro) {
@@ -189,6 +189,71 @@ module.exports = class UseCases {
                 await user.validate(credential)
                 await user.delete()
                 resolve()
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    getUserWarehouses(login, credential) {
+        return new Promise(async (resolve, reject) => {
+            if (!login || typeof login !== "string") {
+                return reject("Login must be a valid string")
+            }
+            if (!credential) {
+                console.log(Error("CREDENTIAL IS MISSINGF"))
+                return reject("INTERNAL SERVER ERROR, TRY LATER")
+            }
+            if (login !== credential.user) {
+                var config = { level: 3, scope: { read: false, write: false, third_party: { read: true, write: true } } }
+            }
+            else {
+                var config = { level: 4, scope: { read: true, write: true, third_party: { read: false, write: false } } }
+            }
+
+            let { entities, DAO, SCI } = this
+
+            try {
+                await SCI.Authenticator.checkCredentialClearance(config, credential)
+                let warehouses = await new entities.Warehouse({ warehouse: { user: login }, DAO }).loadAll()
+                resolve(warehouses)
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    getUserWarehouse(login, id, credential) {
+        return new Promise(async (resolve, reject) => {
+
+            if (!login || typeof login !== "string") {
+                return reject("Login must be a valid string")
+            }
+
+            if (!id || typeof id !== "string") {
+                return reject("Warehouse id must be a valid string")
+            }
+
+            if (!credential) {
+                console.log(Error("CREDENTIAL IS MISSINGF"))
+                return reject("INTERNAL SERVER ERROR, TRY LATER")
+            }
+
+            if (login !== credential.user) {
+                var config = { level: 3, scope: { read: false, write: false, third_party: { read: true, write: true } } }
+            }
+            else {
+                var config = { level: 4, scope: { read: true, write: true, third_party: { read: false, write: false } } }
+            }
+
+            let { entities, DAO, SCI } = this
+
+            try {
+                await SCI.Authenticator.checkCredentialClearance(config, credential)
+                let warehouse = await new entities.Warehouse({ warehouse: { user: login, id }, DAO }).load()
+                resolve(warehouse)
             }
             catch (erro) {
                 reject(erro)

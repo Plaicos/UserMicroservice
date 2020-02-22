@@ -90,9 +90,43 @@ module.exports = class Controller {
                 else {
                     var statusResponse = {
                         status: `User '${login}' does not exist`
-                    } 
+                    }
                 }
                 callback(null, statusResponse)
+            }
+            catch (erro) {
+                self.handleError(erro, callback)
+            }
+        }
+    }
+
+    get_user_warehouses() {
+        var self = this
+        return async function (call, callback) {
+            let { credential, login } = call.request
+
+            try {
+                let warehouses = {
+                    warehouses: await self.UseCases.getUserWarehouses(login, credential)
+                }
+                callback(null, warehouses)
+                console.log({ warehouses })
+            }
+            catch (erro) {
+                self.handleError(erro, callback)
+            }
+        }
+    }
+
+    get_user_warehouse() {
+        var self = this
+        return async function (call, callback) {
+            let { credential, user, id } = call.request
+
+            try {
+                let warehouse = await self.UseCases.getUserWarehouse(user, id, credential)
+                callback(null, warehouse)
+                console.log({ warehouse })
             }
             catch (erro) {
                 self.handleError(erro, callback)
