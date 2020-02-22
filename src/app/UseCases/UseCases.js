@@ -160,8 +160,12 @@ module.exports = class UseCases {
             let { DAO, entities } = this
 
             try {
-                await new entities.User({ user: { login: login }, DAO }).load()
-                resolve()
+                if (await DAO.checkUser(login)) {
+                    return resolve(true)
+                }
+                else {
+                    return resolve(false)
+                }
             }
             catch (erro) {
                 reject(erro)

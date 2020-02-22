@@ -81,9 +81,16 @@ module.exports = class Controller {
             let { login } = call.request
 
             try {
-                await self.UseCases.checkUser(login)
-                let statusResponse = {
-                    status: "ok"
+                let status = await self.UseCases.checkUser(login)
+                if (status === true) {
+                    var statusResponse = {
+                        status: "ok"
+                    }
+                }
+                else {
+                    var statusResponse = {
+                        status: `User '${login}' does not exist`
+                    } 
                 }
                 callback(null, statusResponse)
             }
