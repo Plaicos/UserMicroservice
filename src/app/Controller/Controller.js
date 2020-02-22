@@ -88,7 +88,7 @@ module.exports = class Controller {
                 callback(null, statusResponse)
             }
             catch (erro) {
-                reject(erro)
+                self.handleError(erro, callback)
             }
         }
     }
