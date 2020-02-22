@@ -1,4 +1,5 @@
 syntax = "proto3";
+package UserPackage;
 
 service User {
     rpc sign_up (sign_up_data) returns (statusResponse);
