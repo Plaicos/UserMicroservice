@@ -131,12 +131,12 @@ module.exports = class UseCases {
 
             try {
                 let user = await new entities.User({ user: { login: data.login }, DAO, SCI }).load()
-                if(data.password === user.password){
+                if (data.password === user.password) {
                     let session = {
                         status: "ok",
                         session_data: {
                             logged_user: data.login,
-                            token:await SCI.Authenticator.generateToken(user.login)
+                            token: await SCI.Authenticator.generateToken(user.login)
                         }
                     }
                     resolve(session)
@@ -144,6 +144,24 @@ module.exports = class UseCases {
                 else {
                     return reject("Wrong Password")
                 }
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        })
+    }
+
+    checkUser(login) {
+        return new Promise(async (resolve, reject) => {
+            if (!login || typeof login !== "string") {
+                return reject("User login must be a valid string")
+            }
+
+            let { DAO, entities } = this
+
+            try {
+                await new entities.User({ user: { login: login }, DAO }).load()
+                resolve()
             }
             catch (erro) {
                 reject(erro)

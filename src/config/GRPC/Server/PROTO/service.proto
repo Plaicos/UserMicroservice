@@ -5,6 +5,7 @@ service User {
     rpc delete_user (userDelete) returns (statusResponse);
     rpc get_user (userGet) returns (user_data);
     rpc log_in (login_data) returns (session);
+    rpc check_user (userGet) returns (statusResponse);
 }
 
 message login_data {

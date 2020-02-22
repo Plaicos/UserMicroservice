@@ -74,4 +74,22 @@ module.exports = class Controller {
             }
         }
     }
+
+    check_user() {
+        var self = this
+        return async function (call, callback) {
+            let { login } = call.request
+
+            try {
+                await self.UseCases.checkUser(login)
+                let statusResponse = {
+                    status: "ok"
+                }
+                callback(null, statusResponse)
+            }
+            catch (erro) {
+                reject(erro)
+            }
+        }
+    }
 }
