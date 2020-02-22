@@ -6,11 +6,12 @@ module.exports = class User {
         this.SCI = SCI
         this.entities = require("./sub_entities/sub_entitites.js")
         this.Company = require("../Company/Company")
+        this.Warehouse = require("../Warehouse/Warehouse")
     }
 
     build() {
         return new Promise(async (resolve, reject) => {
-            let { data, DAO, SCI, RF, entities, Company } = this
+            let { data, DAO, SCI, RF, entities, Company, Warehouse } = this
 
             if (!data || typeof data !== "object") {
                 return reject("Sign up data must be a valid object")
@@ -18,8 +19,7 @@ module.exports = class User {
 
             let { login, password, plan, type, email, recovery_email, company, warehouse } = data
             let user = new Object()
-
-
+            
             try {
                 user.login = await entities.login({ login, DAO })
                 user.password = await entities.password(password)
@@ -28,7 +28,7 @@ module.exports = class User {
                 user.recovery_email = recovery_email
                 user.plan = await entities.plan({ plan, DAO })
                 user.company = await new Company({ DAO, SCI, company, RF }).build()
-                user.warehouse = await new entities.Warehouse({ warehouse: warehouse, DAO, SCI }).build()
+                user.warehouse = await new Warehouse({ warehouse, DAO, SCI }).build()
                 user.warehouse.assign_user(user.login)
                 //
                 user = await this.methods(user)
@@ -69,13 +69,15 @@ module.exports = class User {
     }
 
     delete() {
-        var { DAO } = this
+        var { DAO, SCI } = this
         return function () {
             return new Promise(async (resolve, reject) => {
                 let { login } = this
+                let credential = { user: login, level: 4, scope: { read: true, write: true, third_party: { read: false, write: false } } }
 
                 try {
                     await DAO.deleteUser(login)
+                    await SCI.Authenticator.deleteCredential(login, credential)
                     resolve()
                 }
                 catch (erro) {

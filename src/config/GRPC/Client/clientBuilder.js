@@ -9,7 +9,8 @@ module.exports = class Client {
         let { Services, Credentials, config } = this
 
         var Client = {
-            Authenticator: new Services.Authenticator(config.port.Authenticator, Credentials.makeCredential(Credentials.Services.Authenticator)),
+            Authenticator: new Services.AuthPackage.Authenticator(config.port.Authenticator, Credentials.makeCredential(Credentials.Services.Authenticator)),
+            Inventory: new Services.InventoryPackage.Inventory(config.port.Inventory, Credentials.makeCredential())
         }
         return Client
     }

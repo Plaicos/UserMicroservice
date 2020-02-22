@@ -1,0 +1,16 @@
+syntax = "proto3";
+package InventoryPackage;
+
+service Inventory {
+    rpc check_location (location) returns (statusResponse);
+}
+
+message location {
+    string country = 1;
+    string state = 2;
+    string city = 3;
+}
+
+message statusResponse {
+    string status = 1;
+}

@@ -10,7 +10,7 @@ module.exports = class Tools {
             Base64: this.Base64,
             RF: this.RF
         }
-        console.log({Tools});
+        
         return Tools;
     }
 

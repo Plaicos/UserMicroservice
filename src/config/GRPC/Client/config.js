@@ -3,7 +3,8 @@ var url = require("./URL/servicesURLS")
 
 var client_config = {
     port: {
-        Authenticator: url.Authenticator
+        Authenticator: url.Authenticator,
+        Inventory: url.Inventory
     }
 }
 

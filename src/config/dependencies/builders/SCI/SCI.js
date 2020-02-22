@@ -7,7 +7,8 @@ module.exports = class SCI {
         return new Promise((resolve, reject) => {
             try {
                 let CommunicationInterface = {
-                    Authenticator: new (require("./Interfaces/Authenticator/AuthInterface"))(this.Interface)
+                    Authenticator: new (require("./Interfaces/Authenticator/AuthInterface"))(this.Interface),
+                    Inventory: new (require("./Interfaces/Inventory/InventoryInterface"))(this.Interface)
                 }
                 //console.log({ CommunicationInterface })
                 resolve(CommunicationInterface)

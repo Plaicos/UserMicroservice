@@ -9,11 +9,18 @@ module.exports = class Warehouse {
     build() {
         return new Promise(async (resolve, reject) => {
             let { DAO, SCI, data, entities } = this
-            let { } = data
-            let warehouse = {}
+        
+            if (!data || typeof data !== "object") {
+                return reject("Warehouse data must be a valid object")
+            }
+
+            let { location } = data
+            let warehouse = new Object()
 
             try {
-
+                warehouse.location = await entities.location({ location: data, DAO, SCI })
+                warehouse = this.methods(warehouse)
+                resolve(warehouse)
             }
             catch (erro) {
                 reject(erro)
@@ -27,7 +34,8 @@ module.exports = class Warehouse {
 
     methods(warehouse) {
         warehouse.__proto__.assign_user = this.assign_user()
-        warehouse.__proto__.change_location = this.change_location()
+        //warehouse.__proto__.change_location = this.change_location()
+        return warehouse;
     }
 
     assign_user() {
@@ -43,5 +51,7 @@ module.exports = class Warehouse {
         }
     }
 
-    change_location()
+    change_location() {
+
+    }
 }

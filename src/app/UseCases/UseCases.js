@@ -61,7 +61,7 @@ module.exports = class UseCases {
 
                 //simulates payment approval
                 rollback.paymentApproved = false
-                throw "Test Error"
+                
                 resolve()
             }
             catch (erro) {

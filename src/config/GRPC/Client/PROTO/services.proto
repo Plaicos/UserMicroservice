@@ -1,3 +1,4 @@
 syntax = "proto3";
 
 import "Authenticator/authenticator.proto";
+import "Inventory/Inventory.proto";

@@ -46,6 +46,7 @@ message user_data{
     string recovery_email = 6;
     plan plan = 7;
     company company = 8;
+    warehouse warehouse = 9;
 }
 
 message company {
@@ -65,6 +66,12 @@ message plan {
 
 message payment_data{
     string method = 1;
+}
+
+message warehouse {
+    string country = 1;
+    string state = 2;
+    string city = 3;
 }
 
 message sign_up_data {
