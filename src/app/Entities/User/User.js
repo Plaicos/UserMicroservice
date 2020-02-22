@@ -16,7 +16,7 @@ module.exports = class User {
                 return reject("Sign up data must be a valid object")
             }
 
-            let { login, password, plan, type, email, recovery_email, company } = data
+            let { login, password, plan, type, email, recovery_email, company, warehouse } = data
             let user = new Object()
 
 
@@ -28,6 +28,8 @@ module.exports = class User {
                 user.recovery_email = recovery_email
                 user.plan = await entities.plan({ plan, DAO })
                 user.company = await new Company({ DAO, SCI, company, RF }).build()
+                user.warehouse = await new entities.Warehouse({ warehouse: warehouse, DAO, SCI }).build()
+                user.warehouse.assign_user(user.login)
                 //
                 user = await this.methods(user)
                 resolve(user)
@@ -126,8 +128,8 @@ module.exports = class User {
         }
     }
 
-    remove_password(){
-        return function(){
+    remove_password() {
+        return function () {
             delete this.password
         }
     }

@@ -40,15 +40,14 @@ module.exports = class UseCases {
                 return reject("Sign up data must be a valid object")
             }
 
+            let { user_data, payment_data } = data
             let { DAO, SCI, RF, entities } = this
-            let rollback = {
-                userCreated: false,
-                credentialCreated: false,
-                paymentApproved: false
-            }
+            let rollback = { userCreated: false, credentialCreated: false, paymentApproved: false }
 
             try {
-                var user = await new entities.User({ user: data.user_data, DAO, SCI, RF }).build()
+                var user = await new entities.User({ user: user_data, DAO, SCI, RF }).build()
+
+                //user registering
                 await DAO.registerUser(user)
                 rollback.userCreated = true
 
