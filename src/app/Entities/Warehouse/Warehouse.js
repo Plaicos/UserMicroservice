@@ -42,6 +42,9 @@ module.exports = class Warehouse {
             }
 
             try {
+                if (!await DAO.checkUser(user)) {
+                    return reject(`User '${user}' does not exist`)
+                }
                 let warehouse = await DAO.getUserWarehouse(user, id)
                 resolve(warehouse)
             }
@@ -61,6 +64,9 @@ module.exports = class Warehouse {
             }
 
             try {
+                if (!await DAO.checkUser(user)) {
+                    return reject(`User '${user}' does not exist`)
+                }
                 let warehouses = await DAO.getUserWarehouses(user)
                 resolve(warehouses)
             }

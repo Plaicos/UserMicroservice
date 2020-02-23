@@ -7,7 +7,7 @@ service User {
     rpc get_user (userGet) returns (user_data);
     rpc log_in (login_data) returns (session);
     rpc check_user (userGet) returns (statusResponse);
-    rpc get_user_warehouses (userGet) returns (warehouses);
+    rpc get_user_warehouses (warehouseGet) returns (warehouses);
     rpc get_user_warehouse (warehouseGet) returns (warehouse);
 }
 

@@ -59,7 +59,7 @@ module.exports = class Controller {
             }
         }
     }
-
+    
     log_in() {
         var self = this
         return async function (call, callback) {
@@ -103,11 +103,11 @@ module.exports = class Controller {
     get_user_warehouses() {
         var self = this
         return async function (call, callback) {
-            let { credential, login } = call.request
+            let { credential, user } = call.request
 
             try {
                 let warehouses = {
-                    warehouses: await self.UseCases.getUserWarehouses(login, credential)
+                    warehouses: await self.UseCases.getUserWarehouses(user, credential)
                 }
                 callback(null, warehouses)
                 console.log({ warehouses })
