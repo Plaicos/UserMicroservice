@@ -65,6 +65,7 @@ message company {
     float icms = 4;
     float pis = 5;
     float cofins = 6;
+    string fantasy_name = 7;
 }
 
 message plan {
