@@ -17,7 +17,7 @@ module.exports = class User {
                 return reject("Sign up data must be a valid object")
             }
 
-            let { login, password, billing, type, email, recovery_email, company, warehouse } = data
+            let { login, password, billing, type, email, recovery_email, company, warehouses } = data
             let user = new Object()
 
             try {
@@ -27,9 +27,13 @@ module.exports = class User {
                 user.email = email
                 user.recovery_email = recovery_email
                 user.company = await new Company({ DAO, SCI, company, RF }).build()
-                user.warehouses = [await new Warehouse({ warehouse, DAO, SCI }).build()]
                 user.plan = await entities.plan({ plan: { size: user.company.size, type: user.type, billing: billing }, DAO })
-                //
+                user.warehouses = new Array()
+                if (warehouses && Array.isArray(warehouses) && warehouses.length > 0) {
+                    for (let warehouse of warehouses) {
+                        user.warehouses.push(await new Warehouse({ warehouse, DAO, SCI }).build())
+                    }
+                }
                 user = await this.methods(user)
                 resolve(user)
             }

@@ -53,13 +53,14 @@ module.exports = class Controller {
             try {
                 let user = await self.UseCases.getUser(login, credential)
                 callback(null, user)
+                console.log({ user })
             }
             catch (erro) {
                 self.handleError(erro, callback)
             }
         }
     }
-    
+
     log_in() {
         var self = this
         return async function (call, callback) {

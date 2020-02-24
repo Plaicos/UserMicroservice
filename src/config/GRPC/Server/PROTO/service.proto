@@ -55,7 +55,7 @@ message user_data{
     string recovery_email = 6;
     string billing = 7;
     company company = 8;
-    warehouse warehouse = 9;
+    repeated warehouse warehouses = 9;
 }
 
 message company {

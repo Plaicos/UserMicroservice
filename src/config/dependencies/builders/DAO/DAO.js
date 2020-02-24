@@ -38,7 +38,7 @@ module.exports = class DAO {
         let { ObjectId } = this
         return new Promise(async (resolve, reject) => {
             try {
-                console.log({ user })
+               
                 for (let i = 0; i < user.warehouses.length; i++) {
                     let _id = ObjectId()
                     user.warehouses[i]._id = _id

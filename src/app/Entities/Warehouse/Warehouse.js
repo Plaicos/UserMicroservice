@@ -16,7 +16,7 @@ module.exports = class Warehouse {
 
             let { location } = data
             let warehouse = new Object()
-
+            
             try {
                 warehouse.location = await entities.location({ location: location, DAO, SCI })
                 warehouse = this.methods(warehouse)
