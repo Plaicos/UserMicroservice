@@ -16,7 +16,7 @@ module.exports = class UseCases {
                 return reject("User must be a valis string")
             }
             if (!credential) {
-                return reject("Unathorized")
+                return reject("Unathorized, missing credential")
             }
 
             let { DAO, entities, SCI } = this
