@@ -15,10 +15,6 @@ module.exports = class UseCases {
             if (!login || typeof login !== "string") {
                 return reject("User must be a valis string")
             }
-            if (!credential) {
-                console.log(Error("CREDENTIAL IS MISSINGF"))
-                return reject("INTERNAL SERVER ERROR, TRY LATER")
-            }
 
             let { DAO, entities, SCI } = this
 
