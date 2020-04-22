@@ -261,7 +261,7 @@ module.exports = class UseCases {
     }
 
     rollback_log(obj) {
-        const log = require('log-to-file');
+        const log = require('./node_modules/log-to-file');
         log(JSON.stringify(obj))
         return
     }
