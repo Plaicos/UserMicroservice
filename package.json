@@ -18,7 +18,7 @@
   "homepage": "https://github.com/RodrigoHBD/PlaicosUserService#readme",
   "dependencies": {
     "@grpc/proto-loader": "^0.5.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "grpc": "^1.24.2",
     "log-to-file": "^2.0.2",
     "mongodb": "^3.5.3",
